@@ -45,12 +45,12 @@
             $con = new DBConnector();//DB connection opened to enter data
 
             print(
-                "<table align='center'>".
-                "<tr>"."<th>User_id<th>"."<th>First name</th>"."<th>Last name</th>"."<th>City name</th>"."</tr>"
+                "<table class=\"table table-responsive\">".
+                "<tr>"."<th>User_id<th>"."<th>First name</th>"."<th>Last name</th>"."<th>City name</th>"."<th><th>"."</tr>"
             );
 
             $query = "SELECT * FROM user";
-            if($res = mysqli_query($con->conn, $query)){// If we get a result from running the query then...
+            if($res = mysqli_query($con->conn, $query) or die("Error: ".mysqli_error($con->conn))){// If we get a result from running the query then...
                 while ($row = $res->fetch_row()) {
                     print(
                         "<tr>"."<td>".$row[0]."<td>"."<td>".$row[1]."</td>"."<td>".$row[2]."</td>"."<td>".$row[3]."</td>"."</tr>"
@@ -67,29 +67,103 @@
 
         }
 
-        public function readUnique()
+        public static function readUnique($user_id)
         {
-               
+            $con = new DBConnector();//DB connection opened to enter data
+
+            //Printing the table head
+            print(
+                "<table class=\"table table-responsive\">".
+                "<tr>"."<th>User_id<th>"."<th>First name</th>"."<th>Last name</th>"."<th>City name</th>"."<th><th>"."</tr>"
+            );
+
+            $query = "SELECT * FROM user WHERE id = ".$user_id;
+            if($res = mysqli_query($con->conn, $query) or die("Error: ".mysqli_error($con->conn))){// If we get a result from running the query then...
+                while ($row = $res->fetch_row()) {
+                    print(
+                        "<tr>"."<td>".$row[0]."<td>"."<td>".$row[1]."</td>"."<td>".$row[2]."</td>"."<td>".$row[3]."</td>"."</tr>"
+                    );
+                }
+                print(
+                "</table>");
+            }
+            else{
+                echo "<td>No records to show</>";
+            };
+
+            $con->closeDatabase();//DB connection closed
         }
 
-        public function search()
+        public static function search($searchBy, $searchTerm)
         {
-            # code...
+            $con = new DBConnector();//DB connection opened to enter data
+
+            //Printing the table head
+            print(
+                "<table class=\"table table-responsive\">".
+                "<tr>"."<th>User_id<th>"."<th>First name</th>"."<th>Last name</th>"."<th>City name</th>"."<th><th>"."</tr>"
+            );
+
+            $query = "SELECT * FROM user WHERE ".$searchBy."='".$searchTerm."'";
+            if($res = mysqli_query($con->conn, $query) or die("Error: ".mysqli_error($con->conn))){// If we get a result from running the query then...
+                while ($row = $res->fetch_row()) {
+                    print(
+                        "<tr>"."<td>".$row[0]."<td>"."<td>".$row[1]."</td>"."<td>".$row[2]."</td>"."<td>".$row[3]."</td>"."</tr>"
+                    );
+                }
+                print(
+                "</table>");
+            }
+            else{
+                echo "No records to show";
+            };
+
+            $con->closeDatabase();//DB connection closed
         }
 
-        public function update()
+        public static function update($field_name, $id, $new_value)
         {
-            # code...
+            $con = new DBConnector();//DB connection opened to enter data
+
+            $query = "UPDATE user SET ".$field_name."='".$new_value."' WHERE id ='".$id."'";
+            if($res = mysqli_query($con->conn, $query) or die("Error: ".mysqli_error($con->conn))){// If we get a result from running the query then...
+                echo "Record updated successfully successfully.";
+            }
+            else{
+                echo "No records to show";
+            };
+
+            $con->closeDatabase();//DB connection closed
         }
 
-        public function removeOne()
+        public static function removeOne($id)
         {
-            # code...
+            $con = new DBConnector();//DB connection opened to enter data
+
+            $query = "DELETE FROM user WHERE id = '".$id."'";
+            if($res = mysqli_query($con->conn, $query) or die("Error: ".mysqli_error($con->conn))){// If we get a result from running the query then...
+                echo "Record deleted successfully.";
+            }
+            else{
+                echo "No records to show";
+            };
+
+            $con->closeDatabase();//DB connection closed
         }
 
-        public function removeAll()
+        public static function removeAll()
         {
-            # code...
+            $con = new DBConnector();//DB connection opened to enter data
+
+            $query = "DELETE FROM user";
+            if($res = mysqli_query($con->conn, $query) or die("Error: ".mysqli_error($con->conn))){// If we get a result from running the query then...
+                echo "Deleted all records.";
+            }
+            else{
+                echo "No records to show";
+            };
+
+            $con->closeDatabase();//DB connection closed
         }
 
     }
