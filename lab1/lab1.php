@@ -7,6 +7,8 @@
     <head>
         <title>PHP LaB 1</title>
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+        <script type="text/javascript"  src="validate.js"></script>
+        <link rel="stylesheet" href="validate.css">
     </head>
 
     <body>
@@ -60,22 +62,46 @@
             </form>
             </div>
 
+            <!-- Create user form -->
             <div class="col-md-5">
                 <h2 align="center">LAB 1</h2>
-                <form action="" method="post" enctype="multipart/form-data">
+                <form action="" method="post" enctype="multipart/form-data" onsubmit="return validateForm()"
+                action="<?$_SERVER['PHP_SELF']?>"  name="user_details" id="user_details">
                     <table align="center">
+
+                        <tr>
+                            <div id="form-errors">
+                                <?php
+                                    session_start();
+                                    if (!empty($_SESSION["form-errors"])) {
+                                        echo " ".$_SESSION["form-errors"];
+                                        unset($_SESSION["form-errors"]);
+                                    }    
+                                ?>
+                            </div>
+                        </tr>
                         
                         <tr>
-                            <td><input type="text" required name="first_name" placeholder="First Name"></td>
+                            <td><input type="text" name="first_name" placeholder="First Name"></td>
                         </tr>
                         <tr>
-                            <td><input type="text" required name="last_name" placeholder="Last Name"></td>
+                            <td><input type="text" name="last_name" placeholder="Last Name"></td>
                         </tr>
                         <tr>
-                            <td><input type="text" required name="user_city" placeholder="City"></td>
+                            <td><input type="text" name="user_city" placeholder="City"></td>
                         </tr>
+                        <tr>
+                            <td><input type="text" name="username" placeholder="Username"></td>
+                        </tr>
+                        <tr>
+                            <td><input type="password" name="password" placeholder="Password"></td>
+                        </tr><br>
                         <tr>
                             <td><input type="submit" name="btn-save" value="SAVE"></td>
+                        </tr>
+                        <hr>
+                        <tr>
+                            <td><a href="login.php" class="btn btn-primary align-content-center">Login</a></td>
                         </tr>
                     </table>
                 </form>
@@ -87,10 +113,29 @@
                     $first_name = $_POST['first_name'];
                     $last_name = $_POST['last_name'];
                     $city = $_POST['user_city'];
+                    $username = $_POST['username'];
+                    $password = $_POST['password'];
             
                     //CReating a new user ObjEct
-                    $user = new User($first_name, $last_name, $city);
-                    $res = $user -> save(); //$res means result
+                    $user = new User($first_name, $last_name, $city, $username, $password);
+
+                    //Server side validation for user details
+                    if (!$user->validateForm()) {
+                        $user->createFormErrorSessions();
+                        header("Refresh: 0");
+                        die();
+                    }
+
+                    //Check if username already exists
+                    if($user->isUserExist()){
+                        echo $_SESSION["form-errors"];
+                        echo "Heyoo";
+                        unset($_SESSION["form-errors"]);
+                        die();
+                    }
+
+                    //Save data to DB
+                    //$res = $user -> save(); //$res means result
             
                     //Receive results from save function and store in boolean variable $res. 
                     //Depending on the value of $res we display true or false
@@ -118,4 +163,5 @@
             ?>
         </div>
     </body>
+
 </html>

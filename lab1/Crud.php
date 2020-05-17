@@ -7,5 +7,9 @@
         public static function update($id1, $id2, $id3);
         public static function removeOne($id);
         public static function removeAll();
+
+        //Lab 2 Methods
+        public function validateForm();
+        public function createFormErrorSessions();
     }
 ?>
