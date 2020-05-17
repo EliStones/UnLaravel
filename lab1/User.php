@@ -23,11 +23,12 @@
         }
 
         //We create new instance of self(), the user for authentication
-        public static function create()
-        {
-            $instance  = new self();
-            return $instance;
-        }
+        //Error with create() requires constructor
+        // public static function create()
+        // {
+        //     $instance  = new self();
+        //     return $instance;
+        // }
 
         public function setUserId($user_id)
         {
@@ -57,6 +58,24 @@
         public function setPassword($password)
         {   
             $this->password = $password;
+        }
+
+        public function isUserExist()
+        {
+            $con = new DBConnector();//DB connection opened to enter data
+
+            $query = "SELECT * FROM user";
+            $res = mysqli_query($con->conn, $query);
+            while ($row = mysqli_fetch_assoc($res)) {
+                if ($row["username"] == $this->username) {
+                    $_SESSION["form-errors"] = "This username is taken";
+                    return true;
+                }      
+            }
+
+            return false;
+
+            $con->closeDatabase();//DB connection closed
         }
 
         public function save()
@@ -229,14 +248,14 @@
             $this->password = password_hash($this->password, PASSWORD_DEFAULT);
         }
 
-        public function isPasswordCorrect()
+        public static function isPasswordCorrect($username, $password)
         {
             $con = new DBConnector();
             $foundUser = false;
             $res = mysqli_query($con, "SELECT * FROM user");
 
             while ($row = mysqli_fetch_assoc($res)) {
-                if (password_verify($this->password, $row["password"]) && $this->username == $row["username"]) {
+                if (password_verify($password, $row["password"]) && $username == $row["username"]) {
                     $found = true;
                 }
             }
@@ -246,9 +265,10 @@
         }
 
         // Login
-        public function login()
+        public static function login($username, $password)
         {
-            if ($this->isPasswordCorrect()) {
+            if (User::isPasswordCorrect($username, $password)) {
+                $_SESSION["username"] = $this->getUsername();
                 //Page to redirect after login
                 header('Location: private_page.php');
             }
@@ -256,30 +276,15 @@
 
         public function createUserSession()
         {
-            $_SESSION["username"] = $this->getUsername();
+            //Implemented in login function
+            //$_SESSION["username"] = $this->getUsername();
         }
 
-        public function logout()
+        public static function logout()
         {
             unset($_SESSION["username"]);
             session_destroy();
             header("Location: lab1.php");
-        }
-
-        public function isUserExist()
-        {
-            $con = new DBConnector();
-            $res = mysqli_query($con, "SELECT * FROM user");
-
-            while ($row = mysqli_fetch_assoc($res)) {
-                if ($this->username == $row["username"]) {
-                    return true;
-                    $_SESSION["form-errors"] = "Username already taken";
-                }
-            }
-
-            $con->closeDatabase();
-            return false;
         }
     }
 ?>

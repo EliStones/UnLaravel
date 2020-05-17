@@ -122,20 +122,19 @@
                     //Server side validation for user details
                     if (!$user->validateForm()) {
                         $user->createFormErrorSessions();
-                        header("Refresh: 0");
+                        //header("Refresh: 0");
                         die();
                     }
 
                     //Check if username already exists
                     if($user->isUserExist()){
                         echo $_SESSION["form-errors"];
-                        echo "Heyoo";
                         unset($_SESSION["form-errors"]);
                         die();
                     }
 
                     //Save data to DB
-                    //$res = $user -> save(); //$res means result
+                    $res = $user -> save(); //$res means result
             
                     //Receive results from save function and store in boolean variable $res. 
                     //Depending on the value of $res we display true or false

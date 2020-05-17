@@ -9,18 +9,14 @@
         $password = $_POST["password"];
 
         //Accessing a user object to verify logins, without creating a new user
-        $instance = User::create();
-        $instance->setUsername($usernmae);
-        $instance->setPassword($password);
+        $loggedIn = User::login($username, $password);
 
         //Checking if password is correct
-        if ($instance->isPasswordCorrect()) {
-            $instance->login();
-            $instance->createUserSession();
-            //Loginand set session variables
+        if (!$loggedIn) {
+            header("Location: private_page.php");
         }
-        else {
-            header("Location: login.php");
+        else{
+            echo "Login error!";
         }
 
         $conn->closeDatabase();

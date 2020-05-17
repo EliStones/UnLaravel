@@ -14,7 +14,7 @@
         <div class="container-fluid">
             <h1>Welcome Person!</h1>
             <h3>This is a private protected page.<br>Only users allowed here</h3>
-            <button href="logout.php" class="btn btn-danger"></button>
+            <a href="logout.php" class="btn btn-danger">Logout</a>
         </div>
     </body>
 </html>
