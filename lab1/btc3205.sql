@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 21, 2020 at 09:58 PM
+-- Generation Time: May 24, 2020 at 01:29 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.4.3
 
@@ -32,17 +32,18 @@ CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `first_name` varchar(32) NOT NULL,
   `last_name` varchar(32) DEFAULT NULL,
-  `user_city` varchar(32) DEFAULT NULL
+  `user_city` varchar(32) DEFAULT NULL,
+  `username` varchar(30) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `profile_image` varchar(90) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `user`
 --
 
-INSERT INTO `user` (`id`, `first_name`, `last_name`, `user_city`) VALUES
-(1, 'Elisha', 'Mbadi', 'NAea'),
-(2, 'Kilokosop', 'Maende', 'Mogiri'),
-(3, 'Freddy', 'Mercury', 'Chicago');
+INSERT INTO `user` (`id`, `first_name`, `last_name`, `user_city`, `username`, `password`, `profile_image`) VALUES
+(25, 'Andrei', 'Mbadi', 'Dobchenkov', 'a_shevchenko', '$2y$10$z4ra8mD9lb1t5NIh2Jaw9eykMUPIrQiwhUhoBjb17AY/NZGBc8CHG', 'background.png');
 
 --
 -- Indexes for dumped tables
@@ -62,7 +63,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

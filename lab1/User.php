@@ -12,14 +12,16 @@
 
         private $username;
         private $password;
+        private $profile_image;
 
-        function __construct($first_name, $last_name, $city_name, $username, $password)
+        function __construct($first_name, $last_name, $city_name, $username, $password, $profile_image)
         {
             $this->city_name = $city_name;
             $this->first_name = $first_name;
             $this->last_name = $last_name;
             $this->username = $username;
             $this->password = $password;
+            $this->pofile_image = $profile_image;
         }
 
         //We create new instance of self(), the user for authentication
@@ -60,6 +62,11 @@
             $this->password = $password;
         }
 
+        public function setProfileImage($profile_image)
+        {
+            $this->profile_image = $profile_image;
+        }
+
         public function isUserExist()
         {
             $con = new DBConnector();//DB connection opened to enter data
@@ -85,13 +92,14 @@
             $ln = $this->last_name;
             $cn = $this->city_name;
             $username = $this->username;
+            $profile_image = $this->profile_image;
 
             //Hashes the Current users password
             $this->hashPassword();
 
             $password = $this->password;
-            $query = "INSERT INTO user(first_name, last_name, user_city, username, password) 
-            VALUES('$fn','$ln','$cn', '$username', '$password')";
+            $query = "INSERT INTO user(first_name, last_name, user_city, username, password, profile_image) 
+            VALUES('$fn','$ln','$cn', '$username', '$password', '$profile_image')";
 
             $res = mysqli_query($con->conn, $query) or die("Error: ".mysqli_error($con->conn));
             return $res;

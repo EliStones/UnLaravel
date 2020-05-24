@@ -1,6 +1,7 @@
 <?php
     include_once('User.php');
     include_once('DBConnector.php');
+    include_once('uploads/FileUploader.php');
 ?>
 
 <html>
@@ -65,8 +66,8 @@
             <!-- Create user form -->
             <div class="col-md-5">
                 <h2 align="center">LAB 1</h2>
-                <form action="" method="post" enctype="multipart/form-data" onsubmit="return validateForm()"
-                action="<?$_SERVER['PHP_SELF']?>"  name="user_details" id="user_details">
+                <form method="post" enctype="multipart/form-data" onsubmit="return validateForm()"
+                action="<?php echo $_SERVER['PHP_SELF']?>"  name="user_details" id="user_details">
                     <table align="center">
 
                         <tr>
@@ -91,6 +92,9 @@
                             <td><input type="text" name="user_city" placeholder="City"></td>
                         </tr>
                         <tr>
+                            <td>Profile image: <input type="file" name="fileToUpload" id="fileToUpload"></td>
+                        </tr>
+                        <tr>
                             <td><input type="text" name="username" placeholder="Username"></td>
                         </tr>
                         <tr>
@@ -105,6 +109,13 @@
                         </tr>
                     </table>
                 </form>
+
+                <!-- Test for image submission -->
+                <!-- <form action="<?//php echo $_SERVER['PHP_SELF']?>" method="POST" enctype="multipart/form-data">
+                    Profile image: <input type="file" name="fileToUpload" id="fileToUpload">
+                    <input type="submit" name="save-dp">
+                </form> -->
+
             </div>
         </div>
         <div class="row w-75 m-auto">
@@ -115,9 +126,10 @@
                     $city = $_POST['user_city'];
                     $username = $_POST['username'];
                     $password = $_POST['password'];
+                    $profile_image = null;
             
                     //CReating a new user ObjEct
-                    $user = new User($first_name, $last_name, $city, $username, $password);
+                    $user = new User($first_name, $last_name, $city, $username, $password, $profile_image);
 
                     //Server side validation for user details
                     if (!$user->validateForm()) {
@@ -133,6 +145,22 @@
                         die();
                     }
 
+                    //If no image added, we go ahead to save user
+                    if ($_FILES["fileToUpload"]["error"] != 4) {
+                        $fileUpload = new FileUploader();
+                        $uploadedImage = $fileUpload->uploadFile();
+                        if (!$uploadedImage) {
+                            echo "<br>Error uploading image.";
+                            echo $_SESSION["upload-errors"];
+                            unset($_SESSION["upload-errors"]);
+                            //If error with uploading image we end
+                            die();
+                        }
+                        
+                        //Add profile image to user object
+                        $user->setProfileImage($fileUpload->getOriginalName());
+                    }
+
                     //Save data to DB
                     $res = $user -> save(); //$res means result
             
@@ -142,9 +170,16 @@
                         echo "Operation Successful";
                     }
                     else {
-                        echo "Error adding user.";
+                        echo "<br>Error adding user.";
                     };
                 }
+
+                // test image submission
+                // if(isset($_POST["save-dp"])){
+                //     print_r($_FILES["fileToUpload"]);
+                //     // $fileUpload = new FileUploader();
+                //     // $fileUpload->uploadFile();
+                // }
             
                 if (isset($_POST['btn-view-saves'])) {
                     User::readAll();
