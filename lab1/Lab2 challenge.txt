@@ -1,0 +1,9 @@
+In case a user does not have the right date, 
+
+We can use a Time API, e.g from Windows to get the correct time and compare with clients time.
+
+If the result is negative, we can setup alerts to let the user know their time is wrong.
+
+Incase, we do not wish to update the user, we can get the time from the API and set it as the time variable.
+
+This variable can then be saved in the DB.

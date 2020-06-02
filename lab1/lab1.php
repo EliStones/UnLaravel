@@ -7,9 +7,15 @@
 <html>
     <head>
         <title>PHP LaB 1</title>
+        <!-- Stylesheets -->
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-        <script type="text/javascript"  src="validate.js"></script>
         <link rel="stylesheet" href="validate.css">
+
+        <!-- Scripts -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+            crossorigin="anonymous"></script>
+        <script type="text/javascript"  src="validate.js"></script>
+        <script src="timezone.js" type="text/javascript"></script>
     </head>
 
     <body>
@@ -100,6 +106,9 @@
                         <tr>
                             <td><input type="password" name="password" placeholder="Password"></td>
                         </tr><br>
+                        <!-- Hidden input -->
+                        <input type="hidden" name="utc_timestamp" id="utc_timestamp">
+                        <input type="hidden" name="time_zone_offset" id="time_zone_offset">
                         <tr>
                             <td><input type="submit" name="btn-save" value="SAVE"></td>
                         </tr>
@@ -124,12 +133,17 @@
                     $first_name = $_POST['first_name'];
                     $last_name = $_POST['last_name'];
                     $city = $_POST['user_city'];
+
                     $username = $_POST['username'];
                     $password = $_POST['password'];
+
                     $profile_image = null;
+
+                    $timestamp = $_POST["utc_timestamp"];
+                    $offset = $_POST["time_zone_offset"];
             
                     //CReating a new user ObjEct
-                    $user = new User($first_name, $last_name, $city, $username, $password, $profile_image);
+                    $user = new User($first_name, $last_name, $city, $username, $password, $profile_image, $timestamp, $offset);
 
                     //Server side validation for user details
                     if (!$user->validateForm()) {
@@ -177,8 +191,8 @@
                 // test image submission
                 // if(isset($_POST["save-dp"])){
                 //     print_r($_FILES["fileToUpload"]);
-                //     // $fileUpload = new FileUploader();
-                //     // $fileUpload->uploadFile();
+                //     $fileUpload = new FileUploader();
+                //     $fileUpload->uploadFile();
                 // }
             
                 if (isset($_POST['btn-view-saves'])) {

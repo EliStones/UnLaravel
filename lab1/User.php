@@ -1,5 +1,7 @@
 <?php
 
+    //Class file for a User object
+
     include("Crud.php");
     include("Authenticator.php");
     include_once('DBConnector.php');
@@ -14,14 +16,19 @@
         private $password;
         private $profile_image;
 
-        function __construct($first_name, $last_name, $city_name, $username, $password, $profile_image)
+        private $utc_timezone;
+        private $offset;
+
+        function __construct($first_name, $last_name, $city_name, $username, $password, $profile_image, $utc_timezone, $offset)
         {
             $this->city_name = $city_name;
             $this->first_name = $first_name;
             $this->last_name = $last_name;
             $this->username = $username;
             $this->password = $password;
-            $this->pofile_image = $profile_image;
+            $this->profile_image = $profile_image;
+            $this->utc_timezone = $utc_timezone;
+            $this->offset = $offset;
         }
 
         //We create new instance of self(), the user for authentication
@@ -67,6 +74,28 @@
             $this->profile_image = $profile_image;
         }
 
+        public function setOffset($offset)
+        {
+            $this->offset = $offset;
+        }
+
+        public function getOffset()
+        {
+            return $this->offset;
+        }
+
+        public function setUtcTimezone($utc_timezone)
+        {
+            $this->utc_timezone = $utc_timezone;
+        }
+
+        public function getutc_timezone()
+        {
+            return $this->utc_timezone;
+        }
+
+        // End of getters and setters
+
         public function isUserExist()
         {
             $con = new DBConnector();//DB connection opened to enter data
@@ -94,15 +123,24 @@
             $username = $this->username;
             $profile_image = $this->profile_image;
 
+            $utc = $this->utc_timezone;
+            $offset = $this->offset;
+
+            echo $utc;
+            echo $offset;
+
             //Hashes the Current users password
             $this->hashPassword();
 
             $password = $this->password;
-            $query = "INSERT INTO user(first_name, last_name, user_city, username, password, profile_image) 
-            VALUES('$fn','$ln','$cn', '$username', '$password', '$profile_image')";
+            $query = "INSERT INTO user(first_name, last_name, user_city, username, password, profile_image, timestamp, offset) 
+            VALUES('$fn','$ln','$cn', '$username', '$password', '$profile_image','$utc', '$offset')";
 
             $res = mysqli_query($con->conn, $query) or die("Error: ".mysqli_error($con->conn));
             return $res;
+
+            echo $profile_image;
+
 
             $con->closeDatabase();//DB connection closed
         }
