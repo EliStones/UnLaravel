@@ -89,7 +89,7 @@
         }
 
         public function checkApiKey()
-        {   
+        {
             return true;
         }
 

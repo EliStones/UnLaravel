@@ -314,7 +314,7 @@
         public static function login($username, $password)
         {
             if (User::isPasswordCorrect($username, $password)) {
-                $_SESSION["username"] = $this->getUsername();
+                $_SESSION["username"] = User::$username;
                 //Page to redirect after login
                 header('Location: private_page.php');
             }

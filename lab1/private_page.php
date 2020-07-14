@@ -12,9 +12,8 @@
         <link rel="stylesheet" href="bootstrap/css/bootstrap.css.map">
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css.map">
-        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+
+        <link rel="stylesheet" href="validate.css">
     </head>
     <body>
         <div class="container-fluid">
@@ -112,10 +111,7 @@
         <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
             crossorigin="anonymous"></script>
         <script src="bootstrap/js/bootstrap.js"></script>
-        <script src="bootstrap/js/bootstrap.js"></script>
-
 
         <script src="validate.js" type="text/javascript"></script>
         <script src="lab4/apikey.js" type="text/javascript"></script>
-        <link rel="stylesheet" href="validate.css">
 </html>
