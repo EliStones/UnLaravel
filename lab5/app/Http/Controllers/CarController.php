@@ -16,6 +16,8 @@ class CarController extends Controller
     {
         // Show all cars
         $cars = Car::all();
+
+        return view('cars.index', compact('cars'));
     }
 
     /**
@@ -25,17 +27,46 @@ class CarController extends Controller
      */
     public function create(Request $request)
     {
-        // Create a car
-        $make = $request->input('make');
-        $model = $request->input('model');
-        $produced_on = $request->input('produced-on');
+        // dd($request->method());
+        //dd($request->method());
+        if ($request->method() == "POST") {
+            // Validating input data
+            $this->validate($request, [
+                'make' => 'required|unique:cars',
+                'model' => 'required|unique:cars',
+                'produced_on' => 'requiredunique:cars',
+                'image' => 'required|unique:cars'
+            ]);
 
-        $car = new Car(
-            // 'make' => $make,
-            // 'model' => $model,
-            // 'produced_on' => $produced_on,
-        );
+            // Create a car
+            $make = $request->input('make');
+            $model = $request->input('model');
+            $produced_on = $request->input('produced_on');
 
+            // dd($image);
+
+            // dd($make,$model,$produced_on);
+
+            $car = new Car;
+            $car->make = $make;
+            $car->model = $model;
+            $car->produced_on = $produced_on;
+
+            // Move image to storage
+            $car->image = $request->file('image')->store('public/images');
+
+            // dd($car);
+
+            $car->save();
+            $request->session()->flash('form_status', "Car added successfully");
+
+            return redirect('/car');
+        }
+        
+
+        if($request->method() == "GET"){
+            return view('cars.create');
+        }
     }
 
     /**
@@ -55,9 +86,13 @@ class CarController extends Controller
      * @param  \App\Car  $car
      * @return \Illuminate\Http\Response
      */
-    public function show(Car $car)
+    public function show($id)
     {
         // Show a single car
+        // $car = Car::findOrFail($id);
+        return view('cars.show', 
+        // compact($car)
+        );
     }
 
     /**
